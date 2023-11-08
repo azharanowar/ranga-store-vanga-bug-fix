@@ -21,7 +21,6 @@ const showProducts = (products) => {
    const allProducts = products.slice(0, 10).map((pd) => pd);
    for (const product of allProducts) {
       const image = product.image;
-      console.log(product);
       const div = document.createElement('div');
       div.classList.add('product');
       div.innerHTML = `<div class="single-product">
@@ -54,7 +53,7 @@ const addToCart = (id, price) => {
 };
 
 const showProductDetails = (product_id) => {
-   console.log(product_id);
+   // console.log(product_id);
    fetch(`https://fakestoreapi.com/products/${product_id}`)
       .then((res) => res.json())
       .then((data) => showProductDetailsInModal(data));
@@ -79,29 +78,34 @@ const updatePrice = (id, value) => {
    const convertedOldPrice = getInputValue("price");
    const convertPrice = Number(value);
    const total = convertedOldPrice + convertPrice;
-   document.getElementById("price").innerText = total.toFixed(2);
+   setInnerText('price', total.toFixed(2));
 };
 
 // set innerText function
 const setInnerText = (id, value) => {
-   document.getElementById(id).innerText = value.toFixed(2);
+   document.getElementById(id).innerText = value;
 };
 
 // update delivery charge and total Tax
 const updateTaxAndCharge = () => {
    const priceConverted = getInputValue('price');
+   let deliveryAmount = 0;
+   let taxAmount = 0;
    if (priceConverted < 200) {
-      setInnerText('delivery-charge', 30);
-      setInnerText('total-tax', priceConverted * 0.2) // 20% tax;
+      deliveryAmount = 30;
+      taxAmount = priceConverted * 0.2; // 20% tax
    }
    else if (priceConverted < 400) {
-      setInnerText('delivery-charge', 50);
-      setInnerText('total-tax', priceConverted * 0.3) // 30% tax;
+      deliveryAmount = 40;
+      taxAmount = priceConverted * 0.3; // 30% tax
    }
-   else if (priceConverted < 500) {
-      setInnerText('delivery-charge', 60);
-      setInnerText('total-tax', priceConverted * 0.4) // 40% tax;
+   else {
+      deliveryAmount = 60;
+      taxAmount = priceConverted * 0.4; // 40% tax
    }
+
+   setInnerText('delivery-charge', deliveryAmount.toFixed(2));
+   setInnerText('total-tax', taxAmount.toFixed(2));
 };
 
 //grandTotal update function
@@ -116,10 +120,12 @@ const updateTotal = () => {
 // search by category
 document.getElementById("search-btn").addEventListener("click", function () {
    const inputField = document.getElementById("input-value").value;
-   const searchedProduct = arr[0].find((p) =>
-     p.category.startsWith(`${inputField}`)
-   );
-   showProducts(searchedProduct);
+   if (inputField) {
+      const searchedProduct = arr[0].find((p) =>
+         p.category.startsWith(`${inputField}`)
+      );
+      showProducts(searchedProduct);
+   }
  });
 
 
