@@ -68,7 +68,7 @@ const showProductDetailsInModal = (product_details) => {
 
 const getInputValue = (id) => {
    const element = document.getElementById(id).innerText;
-   const converted = parseInt(element);
+   const converted = Number(element);
    return converted;
 };
 
@@ -77,28 +77,28 @@ const updatePrice = (id, value) => {
    const convertedOldPrice = getInputValue("price");
    const convertPrice = Number(value);
    const total = convertedOldPrice + convertPrice;
-   document.getElementById("price").innerText = total;
+   document.getElementById("price").innerText = total.toFixed(2);
 };
 
 // set innerText function
 const setInnerText = (id, value) => {
-   document.getElementById(id).innerText = Math.round(value);
+   document.getElementById(id).innerText = value.toFixed(2);
 };
 
 // update delivery charge and total Tax
 const updateTaxAndCharge = () => {
    const priceConverted = getInputValue('price');
-   if (priceConverted > 200) {
+   if (priceConverted < 200) {
       setInnerText('delivery-charge', 30);
-      setInnerText('total-tax', priceConverted * 0.2);
+      setInnerText('total-tax', priceConverted * 0.2) // 20% tax;
    }
-   if (priceConverted > 400) {
+   else if (priceConverted < 400) {
       setInnerText('delivery-charge', 50);
-      setInnerText('total-tax', priceConverted * 0.3);
+      setInnerText('total-tax', priceConverted * 0.3) // 30% tax;
    }
-   if (priceConverted > 500) {
+   else if (priceConverted < 500) {
       setInnerText('delivery-charge', 60);
-      setInnerText('total-tax', priceConverted * 0.4);
+      setInnerText('total-tax', priceConverted * 0.4) // 40% tax;
    }
 };
 
